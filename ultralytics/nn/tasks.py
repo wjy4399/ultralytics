@@ -9,7 +9,7 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-
+from ultralytics.nn.modules.HTB import C2PSA_HTB,C2PSA_DHSA,TransformerBlock
 from ultralytics.nn.modules import (
     AIFI,
     C1,
@@ -981,6 +981,8 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             C2,
             C2f,
             C3k2,
+            C2PSA_HTB,
+            C2PSA_DHSA,
             RepNCSPELAN4,
             ELAN1,
             ADown,
@@ -1022,6 +1024,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                 RepC3,
                 C2fPSA,
                 C2fCIB,
+                C2PSA_HTB,C2PSA_DHSA,
                 C2PSA,
             }:
                 args.insert(2, n)  # number of repeats
@@ -1042,6 +1045,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             c2 = args[1] if args[3] else args[1] * 4
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
+       
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
         elif m in {Detect, WorldDetect, Segment, Pose, OBB, ImagePoolingAttn, v10Detect}:
@@ -1058,6 +1062,8 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             args = [c1, c2, *args[1:]]
         elif m is CBFuse:
             c2 = ch[f[-1]]
+        elif m is TransformerBlock :
+            args = [ch[f]]
         else:
             c2 = ch[f]
 
