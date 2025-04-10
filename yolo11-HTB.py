@@ -8,8 +8,8 @@ if __name__=="__main__":
     model = YOLO(r"/content/ultralytics/ultralytics/cfg/models/11/yolo11-HTB.yaml")\
         .load(r'/content/yolo11n.pt')  # build from YAML and transfer weights
  
-    results = model.train(data=r'/content/smokier-1/data.yaml',
-                          epochs=100, imgsz=640, batch=8)
+    results = model.train(data=r'/content/smokier-7/data.yaml',
+                          epochs=50, imgsz=640, batch=16)
  
  
  

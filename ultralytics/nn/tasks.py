@@ -6,7 +6,7 @@ import re
 import types
 from copy import deepcopy
 from pathlib import Path
-
+from ultralytics.nn.modules.MSCA import MSCAAttention
 import torch
 import torch.nn as nn
 from ultralytics.nn.modules.HTB import C2PSA_HTB,C2PSA_DHSA,TransformerBlock
@@ -1033,6 +1033,13 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                 legacy = False
                 if scale in "mlx":
                     args[3] = True
+        elif m is AIFI:
+            args = [ch[f], *args]
+        ###### attention     ######
+        elif m is MSCAAttention:
+            c2 = ch[f]
+            args = [c2, *args]
+        ###### attention     ######
         elif m is AIFI:
             args = [ch[f], *args]
         elif m in {HGStem, HGBlock}:
